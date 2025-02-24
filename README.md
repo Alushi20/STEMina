@@ -16,7 +16,7 @@ STEMina is a mobile application designed to connect professionals from the STEM 
 # Install dependencies:
 - `npm install`
 - Start the Expo development server:
- - `expo start`
+ - `npx expo start`
 - Finally, Scan the QR code using the Expo Go app on your mobile device or run it on an emulator.
 # Features!
 - User Authentication: Secure login and signup for users.
