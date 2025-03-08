@@ -37,3 +37,5 @@ STEMina is a mobile application designed to connect professionals from the STEM 
 - Ali Abu Seif - Developer
 - Isabelle Marom - Designer
 - Hala Atari - User Experience
+
+dwijdwij
