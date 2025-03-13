@@ -12,13 +12,17 @@ import {
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+
+import { Link, useRouter } from 'expo-router';
+
+const router = useRouter();
+
 export default function ContactUsScreen({ navigation }) {
   const [message, setMessage] = useState('');
 
   // Handler for back arrow
   const handleGoBack = () => {
-    // If using React Navigation:
-    // navigation.goBack();
+    router.push('/home')
   };
 
   // Handler for submitting the message
@@ -36,8 +40,7 @@ export default function ContactUsScreen({ navigation }) {
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
 
-        {/* STEMina Logo (replace with <Image> if you have a logo asset) */}
-        <Text style={styles.logoText}>STEMina</Text>
+
       </View>
 
       {/* Main Content (Lighter Purple) */}

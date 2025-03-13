@@ -1,3 +1,4 @@
+// app/mentors_screen.js
 import React from 'react';
 import {
   View,
@@ -10,8 +11,11 @@ import {
   Image,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRouter } from 'expo-router'; // Import useRouter
 
 export default function mentors_screen() {
+  const router = useRouter(); // Get the router instance
+
   // Sample data for mentors
   const mentorsData = [
     {
@@ -41,6 +45,7 @@ export default function mentors_screen() {
     // Add more mentors as needed...
   ];
 
+  // Render each mentor item
   const renderMentorItem = ({ item }) => (
     <View style={styles.mentorCard}>
       <Image source={item.avatar} style={styles.mentorAvatar} />
@@ -55,8 +60,12 @@ export default function mentors_screen() {
     <SafeAreaView style={styles.container}>
       {/* Top Bar with Search */}
       <View style={styles.topBar}>
-        <TouchableOpacity style={styles.menuButton}>
-          <Ionicons name="menu" size={24} color="#fff" />
+        {/* Changed Hamburger to Arrow */}
+        <TouchableOpacity 
+          style={styles.menuButton} 
+          onPress={() => router.push('/home')} // Navigate to home when pressed
+        >
+          <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
         <View style={styles.searchContainer}>
           <Ionicons name="search" size={18} color="#7D5584" style={{ marginRight: 5 }} />
@@ -103,7 +112,6 @@ export default function mentors_screen() {
   );
 }
 
-// ------------- STYLES -------------
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -189,10 +197,12 @@ const styles = StyleSheet.create({
   tabLabel: {
     fontSize: 12,
     color: '#999',
+    marginTop: 2,
   },
   tabLabelActive: {
     fontSize: 12,
     color: '#7E5BEF',
+    marginTop: 2,
     fontWeight: '600',
   },
 });

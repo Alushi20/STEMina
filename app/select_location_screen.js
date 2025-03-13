@@ -11,7 +11,9 @@ import {
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { Link, useRouter } from 'expo-router';
 
+const router = useRouter();
 const mapContainerStyle = {
   width: '100%',
   height: '100%',
@@ -30,7 +32,6 @@ export default function SelectLocationScreen({ navigation }) {
   // Handler for search (integrate Google Places API if desired)
   const handleSearch = () => {
     Keyboard.dismiss();
-    // TODO: Implement your location search logic with Google Places API
     console.log('Searching for:', searchQuery);
   };
 
@@ -45,8 +46,7 @@ export default function SelectLocationScreen({ navigation }) {
   // Handler for confirming location selection
   const handleConfirmLocation = () => {
     console.log('Location confirmed:', markerCoord);
-    // Pass the selected coordinates back or update state as needed
-    navigation.goBack();
+    router.push('/upload_event_screen');
   };
 
   return (
@@ -71,7 +71,7 @@ export default function SelectLocationScreen({ navigation }) {
 
       {/* Map using Google Maps API */}
       <View style={styles.mapContainer}>
-        <LoadScript googleMapsApiKey="AIzaSyBvTv-TaVFpMZWmDRWMTy_d9fnwfZOgWrg">
+        <LoadScript googleMapsApiKey="AIzaSyCfQSRH8AGtVIbNUXGNkLYKSxKaSDOFOmY">
           <GoogleMap
             mapContainerStyle={mapContainerStyle}
             center={center}
@@ -109,11 +109,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
   },
-  searchInput: {
-    flex: 1,
-    paddingVertical: 5,
-    color: '#333',
-  },
+  searchInput: { flex: 1, paddingVertical: 5, color: '#333' },
   mapContainer: { flex: 1 },
   confirmButton: {
     position: 'absolute',

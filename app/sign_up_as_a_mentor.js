@@ -1,3 +1,4 @@
+// app/sign_up_as_a_mentor.js
 import React, { useState } from 'react';
 import {
   View,
@@ -8,8 +9,11 @@ import {
   Image,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRouter } from 'expo-router'; // Import useRouter
 
 export default function SignUpAsMentorScreen({ navigation }) {
+  const router = useRouter(); // Create router instance
+
   // Occupations to display as chips
   const occupations = [
     'Physics',
@@ -33,10 +37,8 @@ export default function SignUpAsMentorScreen({ navigation }) {
   // Toggle an occupation in/out of the selected array
   const handleOccupationPress = (occ) => {
     if (selectedOccupations.includes(occ)) {
-      // remove it
       setSelectedOccupations(selectedOccupations.filter((o) => o !== occ));
     } else {
-      // add it
       setSelectedOccupations([...selectedOccupations, occ]);
     }
   };
@@ -58,19 +60,13 @@ export default function SignUpAsMentorScreen({ navigation }) {
       <View style={styles.headerContainer}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => {
-            // navigation.goBack() or any desired action
-          }}
+          onPress={() => router.push('/signup')} // Back arrow now navigates to the signup page
         >
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
 
-        {/* STEMina logo (text or image) */}
+        {/* STEMina Logo (text or image) */}
         <View style={styles.logoContainer}>
-          {/* Example: If you have a local image:
-              <Image source={require('../assets/stemina.png')} style={styles.logoImage} />
-             Otherwise, using text as a placeholder:
-          */}
           <Text style={styles.logoText}>STEMina</Text>
         </View>
       </View>
@@ -132,92 +128,85 @@ export default function SignUpAsMentorScreen({ navigation }) {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#BFA0F3', // Main purple background
-    },
-    headerContainer: {
-      height: '25%',
-      backgroundColor: '#BFA0F3',
-      position: 'relative',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    backButton: {
-      position: 'absolute',
-      left: 20,
-      top: 50,
-    },
-    logoContainer: {
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    // If you have a local image, use this style:
-    // logoImage: {
-    //   width: 100,
-    //   height: 100,
-    //   resizeMode: 'contain',
-    // },
-    logoText: {
-      fontSize: 32,
-      fontWeight: 'bold',
-      color: '#fff',
-    },
-    formContainer: {
-      flex: 1,
-      backgroundColor: '#E9D5FF', // Lighter purple background
-      borderTopLeftRadius: 40,
-      borderTopRightRadius: 40,
-      paddingTop: 30,
-      paddingHorizontal: 30,
-    },
-    scrollContent: {
-      paddingBottom: 60, // so content doesn't get cut off
-    },
-    promptText: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: '#4D275F',
-      marginBottom: 10,
-      marginTop: 10,
-      textAlign: 'center',
-    },
-    chipWrapper: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      marginBottom: 20,
-    },
-    chip: {
-      backgroundColor: '#FFF',
-      borderRadius: 20,
-      paddingHorizontal: 15,
-      paddingVertical: 8,
-      margin: 5,
-    },
-    chipSelected: {
-      backgroundColor: '#7E5BEF',
-    },
-    chipText: {
-      color: '#7D5584',
-      fontWeight: '600',
-    },
-    chipTextSelected: {
-      color: '#FFF',
-    },
-    submitButton: {
-      backgroundColor: '#7E5BEF',
-      borderRadius: 25,
-      paddingVertical: 15,
-      alignItems: 'center',
-      marginVertical: 20,
-      width: '100%',
-    },
-    submitButtonText: {
-      color: '#FFF',
-      fontSize: 16,
-      fontWeight: '600',
-    },
-  });
-  
+  container: {
+    flex: 1,
+    backgroundColor: '#BFA0F3', // Main purple background
+  },
+  headerContainer: {
+    height: '25%',
+    backgroundColor: '#BFA0F3',
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  backButton: {
+    position: 'absolute',
+    left: 20, // You can adjust this if you want it on a different side; to place it on the right, use `right: 20`
+    top: 50,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  formContainer: {
+    flex: 1,
+    backgroundColor: '#E9D5FF', // Lighter purple background
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingTop: 30,
+    paddingHorizontal: 30,
+  },
+  scrollContent: {
+    paddingBottom: 60, // so content doesn't get cut off
+  },
+  promptText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#4D275F',
+    marginVertical: 10,
+    textAlign: 'center',
+  },
+  chipWrapper: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  chip: {
+    backgroundColor: '#FFF',
+    borderRadius: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    margin: 5,
+  },
+  chipSelected: {
+    backgroundColor: '#7E5BEF',
+  },
+  chipText: {
+    color: '#7D5584',
+    fontWeight: '600',
+  },
+  chipTextSelected: {
+    color: '#FFF',
+  },
+  submitButton: {
+    backgroundColor: '#7E5BEF',
+    borderRadius: 25,
+    paddingVertical: 15,
+    alignItems: 'center',
+    marginVertical: 20,
+    width: '100%',
+  },
+  submitButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});

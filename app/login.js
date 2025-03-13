@@ -1,3 +1,4 @@
+// app/login.js
 import React, { useState } from 'react';
 import {
   View,
@@ -8,7 +9,8 @@ import {
   Image,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
+import { Link, useRouter } from 'expo-router';
+const router = useRouter();
 export default function SignInScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,22 +32,25 @@ export default function SignInScreen({ navigation }) {
         <TouchableOpacity 
           style={styles.backButton}
           onPress={() => {
-            // navigation.goBack() or any desired action
+            router.push('/')
           }}
         >
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
         
-        {/* STEMina Logo (replace with your own asset if you have one) */}
-        <Text style={styles.logoText}>STEMina</Text>
-        {/* Or use <Image source={require('../assets/stemina.png')} style={styles.logoImage} /> */}
+
       </View>
 
       {/* Form Container */}
       <View style={styles.formContainer}>
         {/* Email Input */}
         <View style={styles.inputWrapper}>
-          <Ionicons name="mail-outline" size={20} color="#7D5584" style={styles.inputIcon} />
+          <Ionicons 
+            name="mail-outline" 
+            size={20} 
+            color="#7D5584" 
+            style={styles.inputIcon} 
+          />
           <TextInput
             style={styles.input}
             placeholder="Email"
@@ -58,7 +63,12 @@ export default function SignInScreen({ navigation }) {
 
         {/* Password Input with Eye Icon */}
         <View style={styles.inputWrapper}>
-          <Ionicons name="lock-closed-outline" size={20} color="#7D5584" style={styles.inputIcon} />
+          <Ionicons 
+            name="lock-closed-outline" 
+            size={20} 
+            color="#7D5584" 
+            style={styles.inputIcon} 
+          />
           <TextInput
             style={styles.input}
             placeholder="Password"
@@ -83,9 +93,19 @@ export default function SignInScreen({ navigation }) {
         </TouchableOpacity>
 
         {/* Log In Button */}
-        <TouchableOpacity style={styles.loginButton} onPress={handleSignIn}>
-          <Text style={styles.loginButtonText}>LOG IN</Text>
-        </TouchableOpacity>
+        <Link
+          href="/home"
+          style={styles.loginButton}
+          onPress={(e) => {
+            // Optionally, if you need to prevent default navigation until sign-in is complete:
+            // e.preventDefault();
+            handleSignIn();
+          }}
+        >
+          <View style={styles.loginButtonContent}>
+            <Text style={styles.loginButtonText}>LOG IN</Text>
+          </View>
+        </Link>
 
         {/* OR LOG IN BY */}
         <View style={styles.orContainer}>
@@ -105,7 +125,9 @@ export default function SignInScreen({ navigation }) {
         {/* Bottom Sign Up Prompt */}
         <View style={styles.bottomSignUp}>
           <Text style={{ color: '#7D5584' }}>Don't have account? </Text>
-          <TouchableOpacity onPress={() => {/* navigation to Sign Up screen */}}>
+          <TouchableOpacity onPress={() => {
+            // navigation to Sign Up screen
+          }}>
             <Text style={styles.signUpText}>SIGN UP</Text>
           </TouchableOpacity>
         </View>
@@ -115,115 +137,113 @@ export default function SignInScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#BFA0F3', // Main purple background
-    },
-    headerContainer: {
-      height: '30%',
-      backgroundColor: '#BFA0F3',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'relative',
-    },
-    backButton: {
-      position: 'absolute',
-      left: 20,
-      top: 50,
-    },
-    logoText: {
-      fontSize: 32,
-      fontWeight: 'bold',
-      color: '#fff',
-      // If you have an image, remove this text and use an <Image> instead
-    },
-    // If you have a logo image:
-    // logoImage: {
-    //   width: 100,
-    //   height: 100,
-    //   resizeMode: 'contain',
-    // },
-  
-    formContainer: {
-      flex: 1,
-      backgroundColor: '#E9D5FF', // Lighter purple background for the form
-      borderTopLeftRadius: 40,
-      borderTopRightRadius: 40,
-      paddingTop: 40,
-      paddingHorizontal: 30,
-      alignItems: 'center',
-    },
-    inputWrapper: {
-      width: '100%',
-      backgroundColor: '#F4E9FF',
-      borderRadius: 25,
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 15,
-      paddingHorizontal: 15,
-    },
-    inputIcon: {
-      marginRight: 5,
-    },
-    eyeIcon: {
-      marginLeft: 5,
-    },
-    input: {
-      flex: 1,
-      paddingVertical: 12,
-      color: '#333',
-    },
-    forgotButton: {
-      alignSelf: 'flex-end',
-      marginRight: 5,
-      marginBottom: 20,
-    },
-    forgotText: {
-      color: '#7D5584',
-      fontWeight: 'bold',
-      textDecorationLine: 'underline',
-    },
-    loginButton: {
-      width: '100%',
-      backgroundColor: '#7E5BEF',
-      paddingVertical: 15,
-      borderRadius: 25,
-      alignItems: 'center',
-      marginBottom: 20,
-    },
-    loginButtonText: {
-      color: '#FFFFFF',
-      fontSize: 16,
-      fontWeight: '600',
-    },
-    orContainer: {
-      marginVertical: 10,
-    },
-    orText: {
-      color: '#7D5584',
-      fontWeight: 'bold',
-    },
-    socialContainer: {
-      flexDirection: 'row',
-      marginVertical: 10,
-    },
-    socialButton: {
-      backgroundColor: '#FFF',
-      borderRadius: 25,
-      width: 50,
-      height: 50,
-      marginHorizontal: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    bottomSignUp: {
-      flexDirection: 'row',
-      marginTop: 20,
-    },
-    signUpText: {
-      color: '#7E5BEF',
-      fontWeight: 'bold',
-      textDecorationLine: 'underline',
-    },
-  });
-  
+  container: {
+    flex: 1,
+    backgroundColor: '#BFA0F3', // Main purple background
+  },
+  headerContainer: {
+    height: '30%',
+    backgroundColor: '#BFA0F3',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  backButton: {
+    position: 'absolute',
+    left: 20,
+    top: 50,
+  },
+  logoText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  formContainer: {
+    flex: 1,
+    backgroundColor: '#E9D5FF', // Lighter purple background for the form
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingTop: 40,
+    paddingHorizontal: 30,
+    alignItems: 'center',
+  },
+  inputWrapper: {
+    width: '100%',
+    backgroundColor: '#F4E9FF',
+    borderRadius: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+    paddingHorizontal: 15,
+  },
+  inputIcon: {
+    marginRight: 5,
+  },
+  eyeIcon: {
+    marginLeft: 5,
+  },
+  input: {
+    flex: 1,
+    paddingVertical: 12,
+    color: '#333',
+  },
+  forgotButton: {
+    alignSelf: 'flex-end',
+    marginRight: 5,
+    marginBottom: 20,
+  },
+  forgotText: {
+    color: '#7D5584',
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+  },
+  loginButton: {
+    width: '100%',
+    backgroundColor: '#7E5BEF',
+    paddingVertical: 15,
+    borderRadius: 25,
+    marginBottom: 20,
+  },
+  loginButtonContent: {
+    flex: 1,
+    alignItems: 'center',      // Centers horizontally
+    justifyContent: 'center',  // Centers vertically
+  },
+  loginButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',       // Ensure text is centered
+  },
+  orContainer: {
+    marginVertical: 10,
+  },
+  orText: {
+    color: '#7D5584',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  socialContainer: {
+    flexDirection: 'row',
+    marginVertical: 10,
+  },
+  socialButton: {
+    backgroundColor: '#FFF',
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    marginHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bottomSignUp: {
+    flexDirection: 'row',
+    marginTop: 20,
+  },
+  signUpText: {
+    color: '#7D558F',
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+    textAlign: 'center',
+  },
+});

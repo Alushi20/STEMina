@@ -37,7 +37,7 @@ export default function ShareStoryScreen({ navigation }) {
         >
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.logoText}>STEMina</Text>
+        
       </View>
 
       {/* Main content container */}

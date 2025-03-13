@@ -1,4 +1,4 @@
-
+// app/community_detail_screen.js
 import React from 'react';
 import {
   View,
@@ -9,14 +9,20 @@ import {
   TextInput,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRouter } from 'expo-router';
 
-export default function community_detail_screen() {
+export default function CommunityDetailScreen() {
+  const router = useRouter();
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Top Bar with Search */}
       <View style={styles.topBar}>
-        <TouchableOpacity style={styles.menuButton}>
-          <Ionicons name="menu" size={24} color="#fff" />
+        <TouchableOpacity 
+          style={styles.menuButton} 
+          onPress={() => router.push('/communities_screen')}
+        >
+          <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
         <View style={styles.searchContainer}>
           <Ionicons name="search" size={18} color="#7D5584" style={{ marginRight: 5 }} />
@@ -39,9 +45,7 @@ export default function community_detail_screen() {
           mavis, nec turpis orci lectus maecenas.
         </Text>
 
-        <TouchableOpacity style={styles.joinButton}>
-          <Text style={styles.joinButtonText}>Join</Text>
-        </TouchableOpacity>
+        
       </View>
 
       {/* Bottom Tab Bar */}
@@ -67,7 +71,6 @@ export default function community_detail_screen() {
   );
 }
 
-// ------------- STYLES -------------
 const styles = StyleSheet.create({
   container: {
     flex: 1,

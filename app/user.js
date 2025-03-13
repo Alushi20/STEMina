@@ -1,3 +1,4 @@
+// app/user.js
 import React, { useState } from 'react';
 import {
   View,
@@ -8,30 +9,25 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRouter } from 'expo-router';
 
-export default function user({ navigation }) {
-  // Example states for toggling Skills / Workplaces
+export default function UserScreen() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('skills');
-
-  // Handler for back arrow
-  const handleGoBack = () => {
-    // If using React Navigation:
-    // navigation.goBack();
-  };
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Curved Purple Header */}
       <View style={styles.headerContainer}>
-        {/* Back Arrow */}
-        <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
+        {/* Back Arrow (takes user to Home page) */}
+        <TouchableOpacity style={styles.backButton} onPress={() => router.push('/')}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
 
         {/* User Avatar */}
         <View style={styles.avatarWrapper}>
           <Image
-            source={require('../assets/images/emily.png')} // Replace with your avatar path
+            source={require('../assets/images/emily.png')} // Replace with your avatar image
             style={styles.avatar}
           />
         </View>
@@ -69,18 +65,21 @@ export default function user({ navigation }) {
             style={[styles.tabButton, activeTab === 'workplaces' && styles.tabButtonActive]}
             onPress={() => setActiveTab('workplaces')}
           >
-            <Text
-              style={[
-                styles.tabButtonText,
-                activeTab === 'workplaces' && styles.tabButtonTextActive,
-              ]}
-            >
+            <Text style={[styles.tabButtonText, activeTab === 'workplaces' && styles.tabButtonTextActive]}>
               Workplaces
             </Text>
           </TouchableOpacity>
         </View>
 
-        {/* Example content for each tab */}
+        {/* Edit Profile Button */}
+        <TouchableOpacity
+          style={styles.editProfileButton}
+          onPress={() => router.push('/edit_profile')}
+        >
+          <Text style={styles.editProfileButtonText}>Edit Profile</Text>
+        </TouchableOpacity>
+
+        {/* Example Tab Content */}
         {activeTab === 'skills' ? (
           <View style={styles.tabContent}>
             <Text style={styles.tabContentText}>User’s skills go here.</Text>
@@ -100,11 +99,50 @@ export default function user({ navigation }) {
           or click the following for a direct message
         </Text>
       </View>
+
+      {/* Bottom Tab Bar */}
+      <View style={styles.bottomTabBar}>
+        {/* Home */}
+        <TouchableOpacity 
+          style={styles.tabItem}
+          onPress={() => router.push('/')} // or '/home' if your home route is named "home"
+        >
+          <Ionicons name="home" size={24} color="#999" />
+          <Text style={styles.tabLabel}>Home</Text>
+        </TouchableOpacity>
+
+        {/* Communities */}
+        <TouchableOpacity 
+          style={styles.tabItem}
+          onPress={() => router.push('/communities_screen')}
+        >
+          <Ionicons name="people-outline" size={24} color="#999" />
+          <Text style={styles.tabLabel}>Communities</Text>
+        </TouchableOpacity>
+
+        {/* Events */}
+        <TouchableOpacity 
+          style={styles.tabItem}
+          onPress={() => router.push('/upcoming_events_screen')}
+        >
+          <Ionicons name="newspaper-outline" size={24} color="#999" />
+          <Text style={styles.tabLabel}>Events</Text>
+        </TouchableOpacity>
+
+
+        {/* Profile (active) */}
+        <TouchableOpacity 
+          style={styles.tabItem}
+          onPress={() => router.push('/user')}
+        >
+          <Ionicons name="person-outline" size={24} color="#7E5BEF" />
+          <Text style={styles.tabLabelActive}>Profile</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
 
-// ------------- STYLES -------------
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -139,8 +177,6 @@ const styles = StyleSheet.create({
     borderRadius: 45,
     resizeMode: 'cover',
   },
-
-  // Main Info
   mainInfoContainer: {
     marginTop: 80, // space for the avatar
     alignItems: 'center',
@@ -174,8 +210,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
   },
-
-  // Tabs (Skills / Workplaces)
   tabRow: {
     flexDirection: 'row',
     marginBottom: 10,
@@ -197,6 +231,21 @@ const styles = StyleSheet.create({
   tabButtonTextActive: {
     color: '#FFF',
   },
+  editProfileButton: {
+    width: '80%',
+    backgroundColor: '#7E5BEF',
+    paddingVertical: 12,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 15,
+  },
+  editProfileButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
   tabContent: {
     width: '100%',
     backgroundColor: '#F4E9FF',
@@ -208,8 +257,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
-
-  // CONTACT US
   contactUsContainer: {
     flex: 1,
     backgroundColor: '#FFF',
@@ -230,5 +277,35 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     textAlign: 'center',
+  },
+
+  // Bottom Tab Bar
+  bottomTabBar: {
+    flexDirection: 'row',
+    height: 60,
+    borderTopWidth: 1,
+    borderTopColor: '#EEE',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    backgroundColor: '#FFF',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  tabItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tabLabel: {
+    fontSize: 12,
+    color: '#999',
+    marginTop: 2,
+  },
+  tabLabelActive: {
+    fontSize: 12,
+    color: '#7E5BEF',
+    marginTop: 2,
+    fontWeight: '600',
   },
 });

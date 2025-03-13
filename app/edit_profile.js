@@ -11,7 +11,10 @@ import {
   Platform,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRouter } from 'expo-router';
 
+
+const router = useRouter();
 export default function edit_profile({ navigation }) {
   // Example states for form fields
   const [name, setName] = useState('');
@@ -22,8 +25,7 @@ export default function edit_profile({ navigation }) {
 
   // Handler for back arrow
   const handleGoBack = () => {
-    // If using React Navigation:
-    // navigation.goBack();
+    router.push('/user')
   };
 
   // Handler for changing the avatar
@@ -117,9 +119,16 @@ export default function edit_profile({ navigation }) {
         </View>
 
         {/* SAVE CHANGES Button */}
-        <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
-          <Text style={styles.saveButtonText}>SAVE CHANGES</Text>
-        </TouchableOpacity>
+        <TouchableOpacity
+  style={styles.saveButton}
+  onPress={() => {
+    handleSaveChanges();
+    router.push('/user');
+  }}
+>
+  <Text style={styles.saveButtonText}>SAVE CHANGES</Text>
+</TouchableOpacity>
+
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

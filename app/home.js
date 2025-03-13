@@ -1,4 +1,5 @@
-import React from 'react';
+// app/home.js
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -11,20 +12,22 @@ import {
   FlatList,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRouter } from 'expo-router'; // <-- Import useRouter
 
 export default function HomeScreen() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter(); // <-- We'll use this for navigation
+
   // Sample data for STEM tools categories
   const stemTools = [
     { id: '1', title: 'BIOTECH', image: require('../assets/images/biotech.png') },
     { id: '2', title: 'PHYSICS', image: require('../assets/images/physics.png') },
-    // Add more categories as needed...
   ];
 
   // Sample data for Latest News
   const latestNews = [
     { id: '1', title: 'News Title 1', image: require('../assets/images/news1.png') },
     { id: '2', title: 'News Title 2', image: require('../assets/images/news2.png') },
-    // Add more news items as needed...
   ];
 
   // Render a STEM tool card
@@ -45,15 +48,17 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-    
-
-      {/* CURVED LIGHT-PURPLE CONTAINER */}
+      {/* Curved Light-Purple Container */}
       <View style={styles.contentContainer}>
-        {/* HAMBURGER + SEARCH BAR */}
+        {/* Top Bar */}
         <View style={styles.topBar}>
-          <TouchableOpacity style={styles.menuButton}>
+          <TouchableOpacity 
+            style={styles.menuButton} 
+            onPress={() => setMenuOpen(true)} // Open side menu
+          >
             <Ionicons name="menu" size={24} color="#fff" />
           </TouchableOpacity>
+
           <View style={styles.searchContainer}>
             <Ionicons name="search" size={18} color="#7D5584" style={{ marginRight: 5 }} />
             <TextInput
@@ -65,7 +70,7 @@ export default function HomeScreen() {
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-          {/* STEM TOOLS SECTION */}
+          {/* STEM Tools Section */}
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>STEM tools</Text>
             <TouchableOpacity>
@@ -81,12 +86,9 @@ export default function HomeScreen() {
             style={{ marginBottom: 20 }}
           />
 
-          {/* STORIES OF SUCCESS */}
+          {/* Stories of Success */}
           <Text style={styles.subHeader}>Stories Of Success</Text>
-
-          {/* Emily's stylized bubble card */}
           <View style={styles.emilyCardContainer}>
-            {/* Circular user image, absolutely positioned over the bubble */}
             <View style={styles.emilyImageWrapper}>
               <Image
                 source={require('../assets/images/emily.png')}
@@ -94,7 +96,6 @@ export default function HomeScreen() {
               />
             </View>
 
-            {/* Purple bubble background */}
             <View style={styles.emilyBubble}>
               <Text style={styles.emilyName}>Emily</Text>
               <Text style={styles.emilySubtitle}>Computer science student</Text>
@@ -107,7 +108,7 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          {/* LATEST NEWS */}
+          {/* Latest News */}
           <Text style={styles.subHeader}>Latest News</Text>
           <FlatList
             data={latestNews}
@@ -120,29 +121,124 @@ export default function HomeScreen() {
         </ScrollView>
       </View>
 
-      {/* BOTTOM TAB BAR */}
-      <View style={styles.bottomTabBar}>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="home" size={24} color="#7E5BEF" />
-          <Text style={styles.tabLabelActive}>Home</Text>
+      {/* Bottom Tab Bar */}
+<View style={styles.bottomTabBar}>
+  {/* Home */}
+  <TouchableOpacity
+    style={styles.tabItem}
+    onPress={() => router.push('/home')} // or '/home' if you have a separate home route
+  >
+    <Ionicons name="home" size={24} color="#7E5BEF" />
+    <Text style={styles.tabLabelActive}>Home</Text>
+  </TouchableOpacity>
+
+  {/* Communities */}
+  <TouchableOpacity
+    style={styles.tabItem}
+    onPress={() => router.push('/communities_screen')}
+  >
+    <Ionicons name="people-outline" size={24} color="#999" />
+    <Text style={styles.tabLabel}>Communities</Text>
+  </TouchableOpacity>
+
+  {/* Events */}
+  <TouchableOpacity
+    style={styles.tabItem}
+    onPress={() => router.push('/upcoming_events_screen')}
+  >
+    <Ionicons name="newspaper-outline" size={24} color="#999" />
+    <Text style={styles.tabLabel}>Events</Text>
+  </TouchableOpacity>
+
+
+
+  {/* Profile */}
+  <TouchableOpacity
+    style={styles.tabItem}
+    onPress={() => router.push('/user')}
+  >
+    <Ionicons name="person-outline" size={24} color="#999" />
+    <Text style={styles.tabLabel}>Profile</Text>
+  </TouchableOpacity>
+</View>
+
+
+      {/* Side Menu Overlay */}
+      {menuOpen && (
+        <View style={styles.sideMenuContainer}>
+          {/* Close Button */}
+          <TouchableOpacity 
+            style={styles.closeMenuButton} 
+            onPress={() => setMenuOpen(false)}
+          >
+            <Ionicons name="close" size={24} color="#000" />
+          </TouchableOpacity>
+
+          {/* Menu Items */}
+          <Text style={styles.menuItemHeader}>Search</Text>
+
+          {/* Mentors -> mentors_screen */}
+          <Text 
+            style={styles.menuItem}
+            onPress={() => {
+              setMenuOpen(false);
+              router.push('/mentors_screen'); 
+            }}
+          >
+            Mentors
+          </Text>
+
+          {/* Communities -> communities_screen */}
+          <Text 
+            style={styles.menuItem}
+            onPress={() => {
+              setMenuOpen(false);
+              router.push('/communities_screen');
+            }}
+          >
+            Communities
+          </Text>
+
+          <Text style={styles.menuItemHeader}>Events</Text>
+          <Text style={styles.menuItem}>Join</Text>
+          <Text style={styles.menuItem}>Add your own</Text>
+
+          <Text style={styles.menuItemHeader}>About</Text>
+          <Text style={styles.menuItem}>Our mission</Text>
+          <Text style={styles.menuItem}>Meet the team</Text>
+
+                  <TouchableOpacity
+          onPress={() => {
+            setMenuOpen(false);
+            router.push('/contact_us');
+          }}
+        >
+          <Text style={styles.menuItem}>Contact us</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="people-outline" size={24} color="#999" />
-          <Text style={styles.tabLabel}>Communities</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="newspaper-outline" size={24} color="#999" />
-          <Text style={styles.tabLabel}>Events</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="book-outline" size={24} color="#999" />
-          <Text style={styles.tabLabel}>Stories</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="person-outline" size={24} color="#999" />
-          <Text style={styles.tabLabel}>Profile</Text>
-        </TouchableOpacity>
-      </View>
+
+          {/* "Our communities" -> commuty_detail_screen */}
+          <Text 
+            style={styles.menuItem}
+            onPress={() => {
+              setMenuOpen(false);
+              router.push('/commuty_detail_screen');
+            }}
+          >
+            Our communities
+          </Text>
+
+          {/* Profile -> user */}
+          <Text 
+            style={styles.menuItem}
+            onPress={() => {
+              setMenuOpen(false);
+              router.push('/user');
+            }}
+          >
+            Profile
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -151,11 +247,11 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#BFA0F3', // Main purple background (like sign-up pages)
+    backgroundColor: '#BFA0F3',
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: '#E9D5FF', // Lighter purple background
+    backgroundColor: '#E9D5FF',
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     paddingTop: 20,
@@ -165,8 +261,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 20,
   },
-
-  // Top Bar inside the content container
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -217,8 +311,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 2, // Android shadow
-    shadowColor: '#000', // iOS shadow
+    elevation: 2,
+    shadowColor: '#000', 
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
@@ -244,14 +338,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 
-  // Emily's Card Container
+  // Emily's Card
   emilyCardContainer: {
     alignItems: 'center',
     marginBottom: 15,
   },
   emilyImageWrapper: {
     zIndex: 2,
-    marginBottom: -35, // so the image overlaps the bubble
+    marginBottom: -35,
   },
   emilyImage: {
     width: 70,
@@ -268,7 +362,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     elevation: 2,
-    shadowColor: '#000', // iOS shadow
+    shadowColor: '#000', 
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
@@ -277,7 +371,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#FFF',
-    marginTop: 40, // space for the image above
+    marginTop: 40, 
   },
   emilySubtitle: {
     fontSize: 14,
@@ -359,5 +453,61 @@ const styles = StyleSheet.create({
     color: '#7E5BEF',
     marginTop: 2,
     fontWeight: '600',
+  },
+
+  // Side Menu
+  sideMenuContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '70%',       // Adjust width as you like
+    height: '100%',
+    backgroundColor: '#F3E6FF',
+    paddingTop: 60,
+    paddingHorizontal: 20,
+    zIndex: 9999,       // Ensure it appears on top
+  },
+  closeMenuButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+  menuItemHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    marginVertical: 10,
+  },
+  menuItem: {
+    fontSize: 16,
+    color: '#999',
+    marginVertical: 5,
+  },
+  sideMenuContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '70%', 
+    height: '100%',
+    backgroundColor: '#F3E6FF',
+    paddingTop: 60,
+    paddingHorizontal: 20,
+    zIndex: 9999,
+  },
+  closeMenuButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+  menuItemHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+    marginVertical: 10,
+  },
+  menuItem: {
+    fontSize: 16,
+    color: '#999',
+    marginVertical: 5,
   },
 });

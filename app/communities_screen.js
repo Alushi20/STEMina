@@ -1,3 +1,4 @@
+// app/communitiesscreen.js
 import React from 'react';
 import {
   View,
@@ -10,8 +11,11 @@ import {
   Image,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRouter } from 'expo-router';
 
-export default function communitiesscreen() {
+export default function CommunitiesScreen() {
+  const router = useRouter();
+
   // Sample data for communities (grid)
   const communitiesData = [
     {
@@ -53,9 +57,6 @@ export default function communitiesscreen() {
     <SafeAreaView style={styles.container}>
       {/* Top Bar with Search */}
       <View style={styles.topBar}>
-        <TouchableOpacity style={styles.menuButton}>
-          <Ionicons name="menu" size={24} color="#fff" />
-        </TouchableOpacity>
         <View style={styles.searchContainer}>
           <Ionicons name="search" size={18} color="#7D5584" style={{ marginRight: 5 }} />
           <TextInput
@@ -79,35 +80,70 @@ export default function communitiesscreen() {
         showsVerticalScrollIndicator={false}
       />
 
-      {/* Create a community button */}
-      <TouchableOpacity style={styles.createButton}>
-        <Text style={styles.createButtonText}>Create a community</Text>
-      </TouchableOpacity>
-
-      {/* Bottom Tab Bar */}
-      <View style={styles.bottomTabBar}>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="home-outline" size={24} color="#999" />
-          <Text style={styles.tabLabel}>Home</Text>
+      {/* Action Buttons Container */}
+      <View style={styles.actionButtonsContainer}>
+        <TouchableOpacity 
+          style={styles.createButton}
+          onPress={() => {
+            // Add any logic for creating a community here.
+            // For example, you might navigate to a "create community" screen.
+          }}
+        >
+          <Text style={styles.createButtonText}>Create a community</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="people" size={24} color="#7E5BEF" />
-          <Text style={styles.tabLabelActive}>Communities</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="briefcase-outline" size={24} color="#999" />
-          <Text style={styles.tabLabel}>Mentors</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="person-outline" size={24} color="#999" />
-          <Text style={styles.tabLabel}>Profile</Text>
+        <TouchableOpacity
+          style={styles.aboutButton}
+          onPress={() => router.push('/community_detail_screen')}
+        >
+          <Text style={styles.aboutButtonText}>About</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Bottom Tab Bar */}
+<View style={styles.bottomTabBar}>
+  {/* Home */}
+  <TouchableOpacity
+    style={styles.tabItem}
+    onPress={() => router.push('/home')} // or '/home' if you have a separate home route
+  >
+    <Ionicons name="home" size={24} color="#999" />
+    <Text style={styles.tabLabelActive}>Home</Text>
+  </TouchableOpacity>
+
+  {/* Communities */}
+  <TouchableOpacity
+    style={styles.tabItem}
+    onPress={() => router.push('/communities_screen')}
+  >
+    <Ionicons name="people-outline" size={24} color="#7E5BEF" />
+    <Text style={styles.tabLabel}>Communities</Text>
+  </TouchableOpacity>
+
+  {/* Events */}
+  <TouchableOpacity
+    style={styles.tabItem}
+    onPress={() => router.push('/upcoming_events_screen')}
+  >
+    <Ionicons name="newspaper-outline" size={24} color="#999" />
+    <Text style={styles.tabLabel}>Events</Text>
+  </TouchableOpacity>
+
+
+
+  {/* Profile */}
+  <TouchableOpacity
+    style={styles.tabItem}
+    onPress={() => router.push('/user')}
+  >
+    <Ionicons name="person-outline" size={24} color="#999" />
+    <Text style={styles.tabLabel}>Profile</Text>
+  </TouchableOpacity>
+</View>
+
     </SafeAreaView>
   );
 }
 
-// ------------- STYLES -------------
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -165,22 +201,39 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     textAlign: 'center',
+    marginBottom: 4,
   },
   communityMembers: {
     fontSize: 12,
     color: '#666',
   },
-  createButton: {
+  // Action Buttons Container (holds both buttons)
+  actionButtonsContainer: {
     position: 'absolute',
     bottom: 70,
+    left: 20,
     right: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  createButton: {
     backgroundColor: '#7E5BEF',
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    elevation: 2,
   },
   createButtonText: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  aboutButton: {
+    backgroundColor: '#7E5BEF',
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  aboutButtonText: {
     color: '#FFF',
     fontSize: 14,
     fontWeight: '600',

@@ -8,6 +8,15 @@ import {
   ScrollView,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Link } from 'expo-router'; // Import Link from expo-router
+import { useRouter } from 'expo-router';
+  const router = useRouter();
+
+
+
+
+
+
 
 export default function SignUpScreen({ navigation }) {
   // Form fields
@@ -38,8 +47,8 @@ export default function SignUpScreen({ navigation }) {
   };
 
   const handleSignUpAsMentor = () => {
-    // Redirect to the mentor sign-up screen
-    navigation.navigate('/sign_up_as_a_mentor');
+    // Replace navigation.navigate with router.push
+    router.push('/sign_up_as_a_mentor');
   };
 
   return (
@@ -49,15 +58,12 @@ export default function SignUpScreen({ navigation }) {
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => {
-            // navigation.goBack() or any desired action
-          }}
+            router.push('/')          }}
         >
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
 
-        {/* STEMina Logo (text or image) */}
-        <Text style={styles.logoText}>STEMina</Text>
-        {/* Or use <Image source={require('../assets/stemina.png')} style={styles.logoImage} /> */}
+       
       </View>
 
       {/* Form Container (ScrollView in case fields exceed screen) */}
@@ -179,10 +185,18 @@ export default function SignUpScreen({ navigation }) {
             />
           </View>
 
-          {/* Sign Up Buttons */}
-          <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
-            <Text style={styles.signUpButtonText}>SIGN UP</Text>
-          </TouchableOpacity>
+          <Link
+  href="/home"
+  style={styles.signUpButton}
+  onPress={(e) => {
+    handleSignUp();
+  }}
+>
+  <View style={styles.signUpButtonContent}>
+    <Text style={styles.signUpButtonText}>SIGN UP</Text>
+  </View>
+</Link>
+
 
           <TouchableOpacity
             style={styles.signUpButtonMentor}

@@ -1,44 +1,50 @@
-import React, { useState } from 'react';
+// app/upload_event_screen.js
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   TextInput,
+  TouchableOpacity,
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRouter } from 'expo-router';
+import { EventContext } from './EventContext';
 
-export default function UploadEventScreen({ navigation }) {
+export default function UploadEventScreen() {
+  const router = useRouter();
+  const { addEvent } = useContext(EventContext);
+
   const [eventName, setEventName] = useState('');
   const [dateTime, setDateTime] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const [facilitators, setFacilitators] = useState('');
 
-  // Handler for uploading an image
   const handleUploadImage = () => {
-    // TODO: Implement image picker logic
     console.log('Upload image tapped');
   };
 
-  // Handler to open the SelectLocationScreen
+  // When the map icon is pressed, redirect to the select location screen.
   const handleSelectLocation = () => {
-    navigation.navigate('SelectLocation');
+    router.push('/select_location_screen');
   };
 
-  // Handler for submitting the event
   const handleSubmit = () => {
-    // TODO: Integrate your backend logic to store the event
-    console.log('Submitting event:', {
+    const newEvent = {
+      id: Date.now().toString(),
       eventName,
       dateTime,
       location,
       description,
       facilitators,
-    });
+    };
+    addEvent(newEvent);
+    console.log('Event submitted:', newEvent);
+    router.push('/upcoming_events_screen');
   };
 
   return (
@@ -47,7 +53,7 @@ export default function UploadEventScreen({ navigation }) {
       <View style={styles.headerContainer}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
+          onPress={() => router.back()}
         >
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
@@ -131,11 +137,10 @@ export default function UploadEventScreen({ navigation }) {
   );
 }
 
-// ---------------- STYLES ----------------
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#BFA0F3', // Main purple
+    backgroundColor: '#BFA0F3',
   },
   headerContainer: {
     height: '25%',
@@ -159,7 +164,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1,
-    backgroundColor: '#E9D5FF', // Lighter purple
+    backgroundColor: '#E9D5FF',
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     marginTop: -30,
@@ -179,7 +184,7 @@ const styles = StyleSheet.create({
   inputWrapper: {
     width: '100%',
     backgroundColor: '#F4E9FF',
-    borderRadius: 20,
+    borderRadius: 25,
     marginBottom: 15,
     paddingHorizontal: 15,
   },

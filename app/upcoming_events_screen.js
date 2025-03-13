@@ -1,115 +1,113 @@
-import React from 'react';
+// app/upcoming_events_screen.js
+import React, { useContext } from 'react';
 import {
   View,
   Text,
   StyleSheet,
+  SafeAreaView,
   TouchableOpacity,
   FlatList,
-  Image,
-  SafeAreaView,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
-// Example data for events
-const eventsData = [
-  {
-    id: '1',
-    dateTime: '1ST MAY - SAT - 2:00 PM',
-    title: 'Women Who Code, Women Who Lead',
-  },
-  {
-    id: '2',
-    dateTime: '1ST MAY - SAT - 2:00 PM',
-    title: 'STEM Circles: Women Mentoring Women',
-  },
-  {
-    id: '3',
-    dateTime: '1ST MAY - SAT - 2:00 PM',
-    title: 'Turning Ideas into STEM Startups',
-  },
-  {
-    id: '4',
-    dateTime: '1ST MAY - SAT - 2:00 PM',
-    title: 'From Passion to Profession',
-  },
-  {
-    id: '5',
-    dateTime: '1ST MAY - SAT - 2:00 PM',
-    title: 'STEMinist Talks: Inspiring the Next Generation',
-  },
-];
+import { useRouter } from 'expo-router';
+import { EventContext } from './EventContext';
 
 export default function UpcomingEventsScreen() {
-  // Render each event item
-  const renderEventItem = ({ item }) => {
-    return (
-      <View style={styles.eventCard}>
-        {/* Placeholder image */}
-        <View style={styles.imagePlaceholder}>
-          <Ionicons name="image-outline" size={36} color="#ccc" />
-        </View>
+  const router = useRouter();
+  const { events } = useContext(EventContext);
 
-        {/* Text container */}
-        <View style={styles.eventInfo}>
-          <Text style={styles.eventDate}>{item.dateTime}</Text>
-          <Text style={styles.eventTitle}>{item.title}</Text>
-        </View>
-
-        {/* Book Button */}
-        <TouchableOpacity style={styles.bookButton}>
-          <Text style={styles.bookButtonText}>Book</Text>
-        </TouchableOpacity>
+  // Renders each event in a row: placeholder image, event info, and Join button
+  const renderEventItem = ({ item }) => (
+    <View style={styles.eventCard}>
+      {/* Placeholder image on the left */}
+      <View style={styles.imagePlaceholder}>
+        <Ionicons name="image-outline" size={36} color="#ccc" />
       </View>
-    );
-  };
+
+      {/* Event info in the middle */}
+      <View style={styles.eventInfo}>
+        <Text style={styles.eventDate}>{item.dateTime || 'Date & Time'}</Text>
+        <Text style={styles.eventTitle}>{item.eventName || 'Event Name'}</Text>
+        <Text style={styles.eventLocation}>{item.location || 'Location'}</Text>
+      </View>
+
+      {/* Join Button on the right */}
+      <TouchableOpacity
+        style={styles.joinButton}
+        onPress={() => {
+          console.log('Join event:', item.id);
+          // Add your "join" logic here (API call, etc.)
+        }}
+      >
+        <Text style={styles.joinButtonText}>Join</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <TouchableOpacity style={styles.iconButton}>
+        <TouchableOpacity style={styles.iconButton} onPress={() => router.push('/home')}>
           <Ionicons name="menu" size={24} color="#000" />
         </TouchableOpacity>
-
         <Text style={styles.topBarTitle}>Upcoming events</Text>
-
-        <TouchableOpacity style={styles.iconButton}>
+        <TouchableOpacity
+          style={styles.iconButton}
+          onPress={() => router.push('/upload_event_screen')}
+        >
           <Ionicons name="add-circle-outline" size={24} color="#000" />
         </TouchableOpacity>
       </View>
 
       {/* Event List */}
       <FlatList
-        data={eventsData}
+        data={events}
         keyExtractor={(item) => item.id}
         renderItem={renderEventItem}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
       />
 
-      {/* Bottom Tab Bar */}
-      <View style={styles.bottomTabBar}>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="home-outline" size={24} color="#999" />
-          <Text style={styles.tabLabel}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="calendar-outline" size={24} color="#7E5BEF" />
-          <Text style={styles.tabLabelActive}>Events</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="settings-outline" size={24} color="#999" />
-          <Text style={styles.tabLabel}>Settings</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="notifications-outline" size={24} color="#999" />
-          <Text style={styles.tabLabel}>Alerts</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
-          <Ionicons name="person-outline" size={24} color="#999" />
-          <Text style={styles.tabLabel}>Profile</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Bottom Tab Bar */}
+<View style={styles.bottomTabBar}>
+  {/* Home */}
+  <TouchableOpacity
+    style={styles.tabItem}
+    onPress={() => router.push('/home')} // or '/home' if you have a separate home route
+  >
+    <Ionicons name="home" size={24} color="#999" />
+    <Text style={styles.tabLabelActive}>Home</Text>
+  </TouchableOpacity>
+
+  {/* Communities */}
+  <TouchableOpacity
+    style={styles.tabItem}
+    onPress={() => router.push('/communities_screen')}
+  >
+    <Ionicons name="people-outline" size={24} color="#999" />
+    <Text style={styles.tabLabel}>Communities</Text>
+  </TouchableOpacity>
+
+  {/* Events */}
+  <TouchableOpacity
+    style={styles.tabItem}
+    onPress={() => router.push('/upcoming_events_screen')}
+  >
+    <Ionicons name="newspaper-outline" size={24} color="#7E5BEF" />
+    <Text style={styles.tabLabel}>Events</Text>
+  </TouchableOpacity>
+
+
+  {/* Profile */}
+  <TouchableOpacity
+    style={styles.tabItem}
+    onPress={() => router.push('/user')}
+  >
+    <Ionicons name="person-outline" size={24} color="#999" />
+    <Text style={styles.tabLabel}>Profile</Text>
+  </TouchableOpacity>
+</View>
     </SafeAreaView>
   );
 }
@@ -126,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 15,
     paddingVertical: 12,
-    backgroundColor: '#F3ECFF',
+    backgroundColor: '#FFF',
   },
   iconButton: {
     padding: 5,
@@ -138,20 +136,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
   },
-  // Event List
   listContent: {
     paddingBottom: 80, // space for bottom tab
   },
   eventCard: {
-    flexDirection: 'row',
+    flexDirection: 'row',    // Row layout to match your screenshot
     alignItems: 'center',
     backgroundColor: '#FFF',
     marginHorizontal: 15,
     marginVertical: 6,
     borderRadius: 10,
     padding: 10,
-    elevation: 1, // Android shadow
-    shadowColor: '#000', // iOS shadow
+    elevation: 1,            // Android shadow
+    shadowColor: '#000',     // iOS shadow
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -166,7 +163,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   eventInfo: {
-    flex: 1,
+    flex: 1,                 // Takes up remaining space in the row
   },
   eventDate: {
     fontSize: 12,
@@ -178,14 +175,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000',
     fontWeight: 'bold',
+    marginBottom: 2,
   },
-  bookButton: {
+  eventLocation: {
+    fontSize: 12,
+    color: '#333',
+  },
+  joinButton: {
     backgroundColor: '#7E5BEF',
     borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 6,
   },
-  bookButtonText: {
+  joinButtonText: {
     color: '#FFF',
     fontSize: 12,
     fontWeight: '600',
