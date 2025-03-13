@@ -1,3 +1,4 @@
+// app/SignUpScreen.js
 import React, { useState } from 'react';
 import {
   View,
@@ -8,18 +9,10 @@ import {
   ScrollView,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Link } from 'expo-router'; // Import Link from expo-router
+import { useAppwrite } from '../lib/appwrite';
 import { useRouter } from 'expo-router';
-  const router = useRouter();
 
-
-
-
-
-
-
-export default function SignUpScreen({ navigation }) {
-  // Form fields
+export default function SignUpScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,26 +21,25 @@ export default function SignUpScreen({ navigation }) {
   const [interests, setInterests] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  // Toggle password visibility
+  const { saveUser, loading, error } = useAppwrite();
+  const router = useRouter();
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  // Handlers
-  const handleSignUp = () => {
-    // TODO: Add your sign-up logic here (e.g. Appwrite, Firebase, etc.)
-    console.log('Signing up with:', {
-      name,
-      email,
-      password,
-      age,
-      education,
-      interests,
-    });
+  const handleSignUp = async () => {
+    try {
+      await saveUser(name, email, password, parseInt(age, 10), education, interests);
+      // Redirect to Home page using router.push
+      router.push('/home');
+    } catch (error) {
+      console.error('Sign-up failed:', error);
+    }
   };
 
   const handleSignUpAsMentor = () => {
-    // Replace navigation.navigate with router.push
+    // Redirect to sign up as mentor page
     router.push('/sign_up_as_a_mentor');
   };
 
@@ -55,31 +47,17 @@ export default function SignUpScreen({ navigation }) {
     <View style={styles.container}>
       {/* Header (Arrow + Logo) */}
       <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => {
-            router.push('/')          }}
-        >
+        <TouchableOpacity style={styles.backButton} onPress={() => router.push('/home')}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
-
-       
+        <Text style={styles.logoText}>STEMina</Text>
       </View>
 
-      {/* Form Container (ScrollView in case fields exceed screen) */}
       <View style={styles.formContainer}>
-        <ScrollView
-          contentContainerStyle={styles.formScroll}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView contentContainerStyle={styles.formScroll} showsVerticalScrollIndicator={false}>
           {/* Name Input */}
           <View style={styles.inputWrapper}>
-            <Ionicons
-              name="person-outline"
-              size={20}
-              color="#7D5584"
-              style={styles.inputIcon}
-            />
+            <Ionicons name="person-outline" size={20} color="#7D5584" style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Name"
@@ -91,12 +69,7 @@ export default function SignUpScreen({ navigation }) {
 
           {/* Email Input */}
           <View style={styles.inputWrapper}>
-            <Ionicons
-              name="mail-outline"
-              size={20}
-              color="#7D5584"
-              style={styles.inputIcon}
-            />
+            <Ionicons name="mail-outline" size={20} color="#7D5584" style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Email"
@@ -107,14 +80,9 @@ export default function SignUpScreen({ navigation }) {
             />
           </View>
 
-          {/* Password Input with Eye Icon */}
+          {/* Password Input */}
           <View style={styles.inputWrapper}>
-            <Ionicons
-              name="lock-closed-outline"
-              size={20}
-              color="#7D5584"
-              style={styles.inputIcon}
-            />
+            <Ionicons name="lock-closed-outline" size={20} color="#7D5584" style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Password"
@@ -135,12 +103,7 @@ export default function SignUpScreen({ navigation }) {
 
           {/* Age Input */}
           <View style={styles.inputWrapper}>
-            <Ionicons
-              name="calendar-outline"
-              size={20}
-              color="#7D5584"
-              style={styles.inputIcon}
-            />
+            <Ionicons name="calendar-outline" size={20} color="#7D5584" style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Age"
@@ -153,12 +116,7 @@ export default function SignUpScreen({ navigation }) {
 
           {/* Highest Level of Education */}
           <View style={styles.inputWrapper}>
-            <Ionicons
-              name="school-outline"
-              size={20}
-              color="#7D5584"
-              style={styles.inputIcon}
-            />
+            <Ionicons name="school-outline" size={20} color="#7D5584" style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Highest level of education"
@@ -170,12 +128,7 @@ export default function SignUpScreen({ navigation }) {
 
           {/* Interests */}
           <View style={styles.inputWrapper}>
-            <Ionicons
-              name="list-circle-outline"
-              size={20}
-              color="#7D5584"
-              style={styles.inputIcon}
-            />
+            <Ionicons name="list-circle-outline" size={20} color="#7D5584" style={styles.inputIcon} />
             <TextInput
               style={styles.input}
               placeholder="Interests"
@@ -185,30 +138,31 @@ export default function SignUpScreen({ navigation }) {
             />
           </View>
 
-          <Link
-  href="/home"
+          {/* Sign Up Button */}
+          <TouchableOpacity
   style={styles.signUpButton}
-  onPress={(e) => {
-    handleSignUp();
+  onPress={async () => {
+    await handleSignUp();
+    router.push('/home');
   }}
 >
-  <View style={styles.signUpButtonContent}>
-    <Text style={styles.signUpButtonText}>SIGN UP</Text>
-  </View>
-</Link>
+  <Text style={styles.signUpButtonText}>SIGN UP</Text>
+</TouchableOpacity>
 
 
-          <TouchableOpacity
-            style={styles.signUpButtonMentor}
-            onPress={handleSignUpAsMentor}
-          >
+          {/* Sign Up as Mentor Button */}
+          <TouchableOpacity style={styles.signUpButtonMentor} onPress={handleSignUpAsMentor}>
             <Text style={styles.signUpButtonText}>SIGN UP AS MENTOR</Text>
           </TouchableOpacity>
 
+          {/* Loading and Error States */}
+          {loading && <Text>Loading...</Text>}
+          {error && <Text>Error: {error}</Text>}
+
           {/* Bottom Prompt */}
           <View style={styles.bottomPrompt}>
-            <Text style={{ color: '#7D5584' }}>Already have account? </Text>
-            <TouchableOpacity onPress={() => {/* navigation to Log In screen */}}>
+            <Text style={{ color: '#7D5584' }}>Already have an account? </Text>
+            <TouchableOpacity onPress={() => router.push('/login')}>
               <Text style={styles.logInText}>Log In</Text>
             </TouchableOpacity>
           </View>
@@ -219,96 +173,55 @@ export default function SignUpScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#BFA0F3', // Main purple background
+  container: { flex: 1, backgroundColor: '#BFA0F3' },
+  headerContainer: { 
+    height: '25%', 
+    backgroundColor: '#BFA0F3', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    position: 'relative' 
   },
-  headerContainer: {
-    height: '25%',
-    backgroundColor: '#BFA0F3',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
+  backButton: { position: 'absolute', left: 20, top: 50 },
+  logoText: { fontSize: 32, fontWeight: 'bold', color: '#fff' },
+  formContainer: { 
+    flex: 1, 
+    backgroundColor: '#E9D5FF', 
+    borderTopLeftRadius: 40, 
+    borderTopRightRadius: 40, 
+    paddingTop: 30, 
+    paddingHorizontal: 30 
   },
-  backButton: {
-    position: 'absolute',
-    left: 20,
-    top: 50,
+  formScroll: { alignItems: 'center', paddingBottom: 50 },
+  inputWrapper: { 
+    width: '100%', 
+    backgroundColor: '#F4E9FF', 
+    borderRadius: 25, 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    marginBottom: 15, 
+    paddingHorizontal: 15 
   },
-  logoText: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#fff',
-    // If you have an image, remove this text and use an <Image> instead
+  inputIcon: { marginRight: 5 },
+  eyeIcon: { marginLeft: 5 },
+  input: { flex: 1, paddingVertical: 12, color: '#333' },
+  signUpButton: { 
+    width: '100%', 
+    backgroundColor: '#7E5BEF', 
+    paddingVertical: 15, 
+    borderRadius: 25, 
+    alignItems: 'center', 
+    marginTop: 10 
   },
-  // If you have a logo image:
-  // logoImage: {
-  //   width: 100,
-  //   height: 100,
-  //   resizeMode: 'contain',
-  // },
-  formContainer: {
-    flex: 1,
-    backgroundColor: '#E9D5FF', // Lighter purple background
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    paddingTop: 30,
-    paddingHorizontal: 30,
+  signUpButtonMentor: { 
+    width: '100%', 
+    backgroundColor: '#7E5BEF', 
+    paddingVertical: 15, 
+    borderRadius: 25, 
+    alignItems: 'center', 
+    marginTop: 10, 
+    marginBottom: 20 
   },
-  formScroll: {
-    alignItems: 'center',
-    paddingBottom: 50, // space for scroll
-  },
-  inputWrapper: {
-    width: '100%',
-    backgroundColor: '#F4E9FF',
-    borderRadius: 25,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
-    paddingHorizontal: 15,
-  },
-  inputIcon: {
-    marginRight: 5,
-  },
-  eyeIcon: {
-    marginLeft: 5,
-  },
-  input: {
-    flex: 1,
-    paddingVertical: 12,
-    color: '#333',
-  },
-  signUpButton: {
-    width: '100%',
-    backgroundColor: '#7E5BEF',
-    paddingVertical: 15,
-    borderRadius: 25,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  signUpButtonMentor: {
-    width: '100%',
-    backgroundColor: '#7E5BEF',
-    paddingVertical: 15,
-    borderRadius: 25,
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  signUpButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  bottomPrompt: {
-    flexDirection: 'row',
-    marginTop: 10,
-    justifyContent: 'center',
-  },
-  logInText: {
-    color: '#7E5BEF',
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
-  },
+  signUpButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: '600' },
+  bottomPrompt: { flexDirection: 'row', marginTop: 10, justifyContent: 'center' },
+  logInText: { color: '#7E5BEF', fontWeight: 'bold', textDecorationLine: 'underline' },
 });

@@ -120,9 +120,16 @@ export default function SignUpAsMentorScreen({ navigation }) {
           </View>
 
           {/* Submit Button */}
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText}>SUBMIT</Text>
-          </TouchableOpacity>
+          <TouchableOpacity
+  style={styles.submitButton}
+  onPress={async () => {
+    await handleSubmit();
+    router.push('/home');
+  }}
+>
+  <Text style={styles.submitButtonText}>SUBMIT</Text>
+</TouchableOpacity>
+
         </ScrollView>
       </View>
     </View>

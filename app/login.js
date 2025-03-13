@@ -126,7 +126,7 @@ export default function SignInScreen({ navigation }) {
         <View style={styles.bottomSignUp}>
           <Text style={{ color: '#7D5584' }}>Don't have account? </Text>
           <TouchableOpacity onPress={() => {
-            // navigation to Sign Up screen
+            router.push("/signup")
           }}>
             <Text style={styles.signUpText}>SIGN UP</Text>
           </TouchableOpacity>
